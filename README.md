@@ -3,7 +3,7 @@
 A lightweight, console-based Java application that implements John Conway's **Doomsday algorithm** to instantly calculate the day of the week for any given calendar date.
 
 ## 🛠️ Tech Stack
-- **Language:** Java (100%)
+- **Language:** Java
 - **Build Automation:** Maven
 - **Concepts:** Mathematical Algorithms, Calendar Logic, Input Validation
 
