@@ -10,12 +10,12 @@ public class DumsDayApplication {
 
     public static  void main (String[] args){
         Scanner scanner = new Scanner(System.in);
-
+        DumsDayApplication app = new DumsDayApplication();
 
         System.out.print("Enter dd.mm.yyyy: ");
         String input = scanner.next();
 
-        while (!IsValid(input)) {
+        while (!app.IsValid(input)) {
             System.out.print("Error! ");
             System.out.println("try again ");
             System.out.print("Enter dd.mm.yyyy: ");
@@ -23,19 +23,18 @@ public class DumsDayApplication {
             input = scanner.next();
         }
 
-        int[] DDate = DecompileDate(input);
-        logick(DDate[0],DDate[1],DDate[2]);
+        int[] DDate = app.DecompileDate(input);
+        app.logick(DDate[0],DDate[1],DDate[2]);
 
     }
 
-    public static boolean IsValid(String date){
+    public boolean IsValid(String date){
 
         return CheckDate(date) != null;
 
-
     }
 
-    public static int[] DecompileDate(String date) {
+    public int[] DecompileDate(String date) {
 
         int[] datearrp = new int[3];
         String[] parts = date.split("\\.");
@@ -44,7 +43,7 @@ public class DumsDayApplication {
         datearrp[2] = Integer.parseInt(parts[2]);
         return datearrp;
     }
-    public static int[] CheckDate(String date){
+    public int[] CheckDate(String date){
 
         int[] datearrp = DecompileDate(date);
 
@@ -62,6 +61,7 @@ public class DumsDayApplication {
                 if (tempday > 31) {
                     return null;
                 }
+                break;
             case 2:
                 if ((IsYearLeap(tempyear) && tempday > 29) || (!IsYearLeap(tempyear) && tempday > 28)) {
                     return null;
@@ -125,18 +125,19 @@ public class DumsDayApplication {
     }
 
 
-    public static void logick (int year, int month, int day) {
-
-
-        System.out.print("The leap year?: "+(IsYearLeap(year) ? "yes" : "no"));
+    public void logick (int day, int month, int year) {
+        System.out.println("Dums Day is the " + DumsDay(day,month, year));
+        System.out.println("The leap year?: "+(IsYearLeap(year) ? "yes" : "no"));
+        System.out.println("Witch Ashorn: "+(GetAshornAllYear(month , year)));
+        System.out.println("This Year Ashorn: "+(GetDayName(GetAshornThisYear(year))));
     }
 
-    public static boolean IsYearLeap (int year) {
+    public boolean IsYearLeap (int year) {
         return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
-    public static int GetAshorn (int monat,int year) {
+    public int GetAshornAllYear (int month,int year) {
 
-        switch(monat) {
+        switch(month) {
             case 1:
                 if (IsYearLeap(year)){
                     return 4;
@@ -173,9 +174,43 @@ public class DumsDayApplication {
                 return 0;
         }
     }
+    public int CentIndex(int year){
+        return ((5*((year/100)%4)+2)%7) ;
+    }
+    public int YearIndex(int year){
+        return ((((year%100)/12)+((year%100)%12)+(((year%100)%12)/4))%7) ;
+    }
 
+    public int GetAshornThisYear (int year){
+        return ((CentIndex(year)+YearIndex(year))%7);
+    }
 
+    public String DumsDay(int day,int month,int year) {
+        int temp = (day-GetAshornAllYear(month,year))%7;
+        if (temp<0) {temp+=7;}
+        return GetDayName((GetAshornThisYear(year)+(temp))%7);
+    }
 
+    public String GetDayName(int day){
+        switch(day) {
+            case 0:
+                return "Sunday";
+            case 1:
+                return "Monday";
+            case 2:
+                return "Tuesday";
+            case 3:
+                return "Wednesday";
+            case 4:
+                return "Thursday";
+            case 5:
+                return "Friday";
+            case 6:
+                return "Saturday";
+            default:
+                return "May Day";
+        }
 
+    }
 
 }
